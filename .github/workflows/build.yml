@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        shell: powershell
+        run: .\build.ps1
+
+      - name: Test
+        shell: powershell
+        run: .\build-tests.ps1
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BraubergSC880
+          path: dist\BraubergSC880.exe
+          if-no-files-found: error
