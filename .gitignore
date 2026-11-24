@@ -1,0 +1,23 @@
+# Build output
+dist/
+tests.exe
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+bin/
+obj/
+
+# Local logs and archives
+*.log
+*.zip
+*.7z
+
+# OS files
+Thumbs.db
+desktop.ini
+.DS_Store
