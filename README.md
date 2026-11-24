@@ -13,6 +13,7 @@
 ![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.x-512BD4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://img.shields.io/badge/tests-47%2F47-brightgreen)
+[![build](https://github.com/mirip666/brauberg-sc880/actions/workflows/build.yml/badge.svg)](https://github.com/mirip666/brauberg-sc880/actions/workflows/build.yml)
 
 <p align="center">
   <a href="docs/screenshot.png"><img src="docs/screenshot.png" width="245" alt="Плоский вид калькулятора"></a>
