@@ -83,7 +83,7 @@ jobs:
         run: |
           docker run --rm -e APP_VERSION -v "$PWD:/src" -w /src archlinux:base-devel bash -c '
             set -e
-            pacman -Syu --noconfirm dotnet-sdk zstd
+            pacman -Syu --noconfirm dotnet-sdk zstd libx11 libice libsm fontconfig openssl
             dotnet publish cross/Sc880.Desktop/Sc880.Desktop.csproj \
               -c Release -r linux-x64 --self-contained true \
               -p:Version="$APP_VERSION" -o /tmp/publish
