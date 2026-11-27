@@ -1,0 +1,31 @@
+# Maintainer: mirip666 <https://github.com/mirip666>
+pkgname=brauberg-sc880
+pkgver=1.1.0
+pkgrel=1
+pkgdesc="Native reimplementation of the BRAUBERG SC-880 scientific calculator"
+arch=('x86_64')
+url="https://github.com/mirip666/brauberg-sc880"
+license=('MIT')
+depends=('libx11' 'libice' 'libsm' 'fontconfig' 'openssl')
+options=('!strip')
+source=("brauberg-sc880-$pkgver-linux-x64.tar.gz::$url/releases/download/v$pkgver/brauberg-sc880-$pkgver-linux-x64.tar.gz")
+sha256sums=('SKIP')
+
+package() {
+  install -dm755 "$pkgdir/usr/lib/$pkgname"
+  cp -a "$srcdir/brauberg-sc880-$pkgver/." "$pkgdir/usr/lib/$pkgname/"
+  chmod 755 "$pkgdir/usr/lib/$pkgname/BraubergSC880"
+  rm -f "$pkgdir/usr/lib/$pkgname/brauberg-sc880.desktop" \
+        "$pkgdir/usr/lib/$pkgname/brauberg-sc880.png" \
+        "$pkgdir/usr/lib/$pkgname/brauberg-sc880"
+
+  install -dm755 "$pkgdir/usr/bin"
+  ln -s "/usr/lib/$pkgname/BraubergSC880" "$pkgdir/usr/bin/$pkgname"
+
+  install -Dm644 "$srcdir/brauberg-sc880-$pkgver/brauberg-sc880.desktop" \
+    "$pkgdir/usr/share/applications/brauberg-sc880.desktop"
+  install -Dm644 "$srcdir/brauberg-sc880-$pkgver/brauberg-sc880.png" \
+    "$pkgdir/usr/share/icons/hicolor/256x256/apps/brauberg-sc880.png"
+  install -Dm644 "$srcdir/brauberg-sc880-$pkgver/LICENSE" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

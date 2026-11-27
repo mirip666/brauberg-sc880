@@ -1,0 +1,108 @@
+name: linux
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: 8.0.x
+  APP_VERSION: 1.1.0
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Test
+        run: dotnet run --project cross/Sc880.Tests/Sc880.Tests.csproj -c Release
+
+      - name: Publish
+        run: >
+          dotnet publish cross/Sc880.Desktop/Sc880.Desktop.csproj
+          -c Release -r linux-x64 --self-contained true
+          -p:Version=${{ env.APP_VERSION }}
+          -o cross/publish/linux-x64
+
+      - name: Install packaging tools
+        run: sudo apt-get update && sudo apt-get install -y rpm squashfs-tools
+
+      - name: Build tarball
+        run: ./cross/packaging/linux/build-tar.sh
+        env:
+          VERSION: ${{ env.APP_VERSION }}
+          PUBLISH: cross/publish/linux-x64
+          OUT: dist/linux
+
+      - name: Build deb
+        run: ./cross/packaging/linux/build-deb.sh
+        env:
+          VERSION: ${{ env.APP_VERSION }}
+          PUBLISH: cross/publish/linux-x64
+          OUT: dist/linux
+
+      - name: Build rpm
+        run: ./cross/packaging/linux/build-rpm.sh
+        env:
+          VERSION: ${{ env.APP_VERSION }}
+          PUBLISH: cross/publish/linux-x64
+          OUT: dist/linux
+
+      - name: Build AppImage
+        run: ./cross/packaging/linux/build-appimage.sh
+        env:
+          VERSION: ${{ env.APP_VERSION }}
+          PUBLISH: cross/publish/linux-x64
+          OUT: dist/linux
+
+      - name: Upload Linux packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: brauberg-sc880-linux-x64
+          path: |
+            dist/linux/*.tar.gz
+            dist/linux/*.deb
+            dist/linux/*.rpm
+            dist/linux/*.AppImage
+          if-no-files-found: error
+
+  arch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Arch package in container
+        run: |
+          docker run --rm -e APP_VERSION -v "$PWD:/src" -w /src archlinux:base-devel bash -c '
+            set -e
+            pacman -Syu --noconfirm dotnet-sdk zstd
+            dotnet publish cross/Sc880.Desktop/Sc880.Desktop.csproj \
+              -c Release -r linux-x64 --self-contained true \
+              -p:Version="$APP_VERSION" -o /tmp/publish
+            VERSION="$APP_VERSION" PUBLISH=/tmp/publish OUT=/src/dist/linux \
+              ./cross/packaging/linux/build-tar.sh
+            useradd -m builder
+            mkdir -p /tmp/pkg
+            cp cross/packaging/arch/PKGBUILD /tmp/pkg/
+            cp "/src/dist/linux/brauberg-sc880-$APP_VERSION-linux-x64.tar.gz" /tmp/pkg/
+            chown -R builder /tmp/pkg
+            su builder -c "cd /tmp/pkg && makepkg -f --noconfirm"
+            cp /tmp/pkg/*.pkg.tar.zst /src/dist/linux/
+          '
+        env:
+          APP_VERSION: ${{ env.APP_VERSION }}
+
+      - name: Upload Arch package
+        uses: actions/upload-artifact@v4
+        with:
+          name: brauberg-sc880-arch-x64
+          path: dist/linux/*.pkg.tar.zst
+          if-no-files-found: error

@@ -1,6 +1,7 @@
 # Build output
 dist/
 tests.exe
+cross/publish/
 
 # Visual Studio / Rider
 .vs/

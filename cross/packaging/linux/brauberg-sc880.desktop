@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=BRAUBERG SC-880
+GenericName=Scientific Calculator
+Comment=Научный калькулятор с поддержкой комплексных чисел, матриц и статистики
+Comment[en]=Scientific calculator with complex numbers, matrices and statistics
+Exec=brauberg-sc880
+Icon=brauberg-sc880
+Terminal=false
+Categories=Utility;Calculator;
+Keywords=calculator;math;scientific;калькулятор;математика;
+StartupNotify=true
+StartupWMClass=BraubergSC880

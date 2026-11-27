@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Sc880.Core</AssemblyName>
+    <RootNamespace>SC880</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\ComplexValue.cs" Link="ComplexValue.cs" />
+    <Compile Include="..\..\src\CalcState.cs" Link="CalcState.cs" />
+    <Compile Include="..\..\src\Engine.cs" Link="Engine.cs" />
+    <Compile Include="..\..\src\Statistics.cs" Link="Statistics.cs" />
+    <Compile Include="..\..\src\MatrixMath.cs" Link="MatrixMath.cs" />
+    <Compile Include="..\..\src\Solvers.cs" Link="Solvers.cs" />
+    <Compile Include="..\..\src\BaseN.cs" Link="BaseN.cs" />
+    <Compile Include="..\..\src\Data.cs" Link="Data.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+
+</Project>
